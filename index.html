@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Birthday party RSVP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1 class="bubble">You’re invited to my 5th birthday party!</h1>
+    <img class="son" src="son.png" alt="Birthday boy sitting on the edge of the RSVP form" width="344" height="671">
+  </div>
+
+  <form class="card" name="rsvp" method="POST" action="/thanks.html" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="rsvp">
+    <p class="hp"><label>Don’t fill this in: <input name="bot-field"></label></p>
+
+    <div class="when">
+      <strong>Saturday 14th November</strong><br>
+      12:00–2:00pm<br>
+      JR Playhouse Greenwood way, B37 5TL
+    </div>
+
+    <div class="field">
+      <label for="child">Child’s first name</label>
+      <input type="text" id="child" name="child_name" required autocomplete="off">
+    </div>
+
+    <fieldset class="row">
+      <legend>Attending?</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="attending" value="Yes" required><span>Yes</span></label>
+        <label class="opt"><input type="radio" name="attending" value="No"><span>No</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Menu: please choose between</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="pizza" value="Pepperoni"><span>Pepperoni pizza</span></label>
+        <label class="opt"><input type="radio" name="pizza" value="Margarita"><span>Margarita pizza</span></label>
+      </div>
+    </fieldset>
+    <p class="menu">Plus crisps and ice cream</p>
+
+    <div class="field">
+      <label for="diet">Dietary restrictions/allergies</label>
+      <input type="text" id="diet" name="dietary" placeholder="Leave blank if none" autocomplete="off">
+    </div>
+
+    <p class="error" id="error" role="alert" hidden>Sorry, that didn’t send. Please try again or email us.</p>
+    <button type="submit">Send RSVP</button>
+  </form>
+
+  <p class="foot">Any queries: <a href="mailto:m.cath@hotmail.com">m.cath@hotmail.com</a></p>
+</main>
+
+<script>
+// Sends the form to Netlify, then opens the thank-you page that matches their answer
+const form = document.querySelector('form[name="rsvp"]');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = new FormData(form);
+  const attending = data.get('attending') === 'No' ? 'no' : 'yes';
+  // Local preview only: Netlify isn't running, so skip sending and just show the thank-you page
+  if (['localhost', '127.0.0.1'].includes(location.hostname)) {
+    window.location.href = '/thanks.html?attending=' + attending;
+    return;
+  }
+  try {
+    const res = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(data).toString()
+    });
+    if (!res.ok) throw new Error('Send failed');
+    window.location.href = '/thanks.html?attending=' + attending;
+  } catch (err) {
+    document.getElementById('error').hidden = false;
+  }
+});
+</script>
+</body>
+</html>

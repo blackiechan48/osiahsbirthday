@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RSVP sent</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="thanks">
+  <!-- Replace thumbs-up.jpg with your thumbs-up photo (same file name) -->
+  <img class="photo" src="thumbs-up.jpg" alt="Birthday boy giving a thumbs up">
+  <h1 id="title">Thank you!</h1>
+  <p id="message">Your RSVP has been sent. See you at the party!</p>
+  <p class="foot">Need to change something? <a href="mailto:m.cath@hotmail.com">m.cath@hotmail.com</a></p>
+</main>
+
+<script>
+// ?attending=no shows the "can't make it" message
+if (new URLSearchParams(location.search).get('attending') === 'no') {
+  document.getElementById('title').textContent = 'Thanks for letting me know.';
+  document.getElementById('message').textContent = 'We’ll miss you!';
+}
+</script>
+</body>
+</html>
